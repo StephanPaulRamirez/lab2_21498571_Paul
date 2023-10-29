@@ -3,12 +3,13 @@
  TDA Option
  especificación
 
- option(code message ChatbotCodeLink InitialFlowCodeLink Keyword Option)
+ option(code,message,ChatbotCodeLink,InitialFlowCodeLink,Keyword,Option)
  option
- option-get-id
- option-get-chatbotcodelink
- option-get-initialflowcodelink
- option-get-keywords
+ optionGetId
+ optionGetMsg
+ optionGetChatbotcodelink
+ optionGetInitialflowcodelink
+ optionGetKeyword
 
  implementacion
 
