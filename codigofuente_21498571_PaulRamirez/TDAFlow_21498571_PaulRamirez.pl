@@ -39,11 +39,13 @@ flowRemoveDup([O|Told], Tnew) :-
 /*
  Predicado: flow(Id, name-msg, Option, Flow)
  Dominios:
-	Id: Int
+    Id: Int
     name-msg: string
     Option: lista de options
     Flow: flow
- Metas: flow
+ Metas:
+    principal: flow
+    secundaria: flowRemoveDup
  Clausulas:  */
 
 flow(Id, NameMsg, Option, [Id, NameMsg, Optionsnodup]) :-
