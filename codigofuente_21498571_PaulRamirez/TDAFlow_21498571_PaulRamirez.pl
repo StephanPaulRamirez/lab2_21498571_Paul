@@ -23,6 +23,7 @@
  Clausulas:
 */
 % Hechos
+flowRemoveDup([], []).
 flowRemoveDup([O],[O]).
 
 % Reglas
@@ -50,3 +51,43 @@ flowRemoveDup([O|Told], Tnew) :-
 
 flow(Id, NameMsg, Option, [Id, NameMsg, Optionsnodup]) :-
     flowRemoveDup(Option, Optionsnodup).
+
+/*
+ Predicado: flowGetId(F, I)
+ Dominios:
+    I: Int
+    F: flow
+ Metas: flowGetId
+ Clausulas:  */
+
+flowGetId([Id|_], Id).
+
+/*
+ Predicado: flowGetNameMsg(F, NM)
+ Dominios:
+    NM: string
+    F: flow
+ Metas: flowGetNameMsg
+ Clausulas:  */
+flowGetNameMsg([_, NameMsg|_], NameMsg).
+
+/*
+ Predicado: flowGetOption(F, O)
+ Dominios:
+    O: lista de options
+    F: flow
+ Metas: flowGetOption
+ Clausulas:  */
+flowGetOption([_, _, Option|_], Option).
+
+/*
+ Predicado: flowAddOption(O, FO, FN)
+ Dominios:
+    FO, FN: flow
+    O: option
+ Metas: flowAddOption
+ Clausulas:  */
+flowAddOption([Id, NameMsg, Options] , Option, Flownew) :-
+    flow(Id, NameMsg, [Option|Options], Flownew).
+
+flowAddOption(Flow, _, Flow).

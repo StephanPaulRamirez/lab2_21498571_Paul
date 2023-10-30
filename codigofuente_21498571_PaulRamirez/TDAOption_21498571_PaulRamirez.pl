@@ -52,7 +52,7 @@ optionGetId([Id|_], Id).
  Metas: optionGetMsg
  Clausulas:  */
 
-optionGetMsg([_, Msg|_], Msg).
+optionGetMsg([_, Message|_], Message).
 
 /*
  Predicado: optionGetChatbotcodelink(O,CCL)
