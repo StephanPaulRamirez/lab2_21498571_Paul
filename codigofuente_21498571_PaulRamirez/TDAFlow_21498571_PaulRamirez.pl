@@ -3,10 +3,11 @@
  TDA Flow
  especificación
 
- flow(Id, NameMsg, Option, Flow)
+ flow(Id, NameMsg, Option)
  flow
  flowGetId
  flowGetNameMsg
+ flowAddOption
 
  implementacion
 
@@ -52,6 +53,7 @@ flowRemoveDup([O|Told], Tnew) :-
 flow(Id, NameMsg, Option, [Id, NameMsg, Optionsnodup]) :-
     flowRemoveDup(Option, Optionsnodup).
 
+% Selectores:
 /*
  Predicado: flowGetId(F, I)
  Dominios:
@@ -80,6 +82,7 @@ flowGetNameMsg([_, NameMsg|_], NameMsg).
  Clausulas:  */
 flowGetOption([_, _, Option|_], Option).
 
+% Modificador:
 /*
  Predicado: flowAddOption(O, FO, FN)
  Dominios:

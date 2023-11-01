@@ -3,7 +3,7 @@
  TDA Option
  especificación
 
- option(code,message,ChatbotCodeLink,InitialFlowCodeLink,Keyword,Option)
+ option(code,message,ChatbotCodeLink,InitialFlowCodeLink,Keyword)
  option
  optionGetId
  optionGetMsg
