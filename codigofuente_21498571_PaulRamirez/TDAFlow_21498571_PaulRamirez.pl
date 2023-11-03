@@ -84,13 +84,14 @@ flowGetOption([_, _, Option|_], Option).
 
 % Modificador:
 /*
- Predicado: flowAddOption(O, FO, FN)
+ Predicado: flowAddOption(Flow, Option, Flownew)
  Dominios:
-    FO, FN: flow
-    O: option
+    Flow, Flownew: flow
+    Option: option
  Metas: flowAddOption
  Clausulas:  */
-flowAddOption([Id, NameMsg, Options] , Option, Flownew) :-
+flowAddOption(Flow , Option, Flownew) :-
+    flowGetId(Flow, Id), flowGetNameMsg(Flow, NameMsg),
+    flowGetOption(Flow, Options),
     flow(Id, NameMsg, [Option|Options], Flownew).
-
 flowAddOption(Flow, _, Flow).
