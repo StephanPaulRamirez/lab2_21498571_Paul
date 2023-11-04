@@ -5,7 +5,6 @@
 
  chatbot(ChatbotID, Name, WelcomeMessage, StartFlowId, Flows)
  chatbot
- chatbot
  chatbotGetId
  chatbotGetName
  chatbotGetMsg
@@ -16,7 +15,7 @@
  implementacion
 
  representacion
- chatbotID (int) X name (String) X welcomeMessage (String) X startFlowId(int)  X  flows(lista de flows) X chatbot(chatbot)
+ chatbotID (int) X name (String) X welcomeMessage (String) X startFlowId(int)  X  flows(lista de flows)
 */
 
 
@@ -44,12 +43,12 @@ chatbotRemoveDup([F|Told], Tnew) :-
 /*
  Predicado: chatbot(ChatbotID, Name, WelcomeMessage, StartFlowId, Flows, Chatbot)
  Dominios:
-	ChatbotID, StartFlowId: Int
+    ChatbotID, StartFlowId: Int
     Name, WelcomeMessage: String
     Flows: Lista de flows
     Chatbot: Chatbot
  Metas:
-	principal: chatbot
+    principal: chatbot
     secundaria: chatbotRemoveDup
  Clausulas:
 */
@@ -61,7 +60,7 @@ chatbot(ChatbotID, Name, WelcomeMessage, StartFlowId, Flows, [ChatbotID, Name, W
 /*
  Predicado: chatbotGetId(C,I)
  Dominios:
-	C: chatbot
+    C: chatbot
     I: Int
  Metas: chatbotGetId
  Clausulas:
@@ -71,7 +70,7 @@ chatbotGetId([Id|_],Id).
 /*
  Predicado: chatbotGetName(C,N)
  Dominios:
-	C: chatbot
+    C: chatbot
     N: String
  Metas: chatbotGetName
  Clausulas:
@@ -81,7 +80,7 @@ chatbotGetName([_, Name|_], Name).
 /*
  Predicado: chatbotGetMsg(C,M)
  Dominios:
-	C: chatbot
+    C: chatbot
     M: string
  Metas: chatbotGetMsg
  Clausulas:
@@ -91,7 +90,7 @@ chatbotGetMsg([_, _, WelcomeMessage|_], WelcomeMessage).
 /*
  Predicado: chatbotGetStartFlowId(C,S)
  Dominios:
-	C: chatbot
+    C: chatbot
     S: int
  Metas: chatbotGetStartFlowId
  Clausulas:
@@ -101,7 +100,7 @@ chatbotGetStartFlowId([_, _, _, StartFlowId|_], StartFlowId).
 /*
  Predicado: chatbotGetFlows(C,F)
  Dominios:
-	C: chatbot
+    C: chatbot
     F: lista de flows
  Metas: chatbotGetFlows
  Clausulas:
@@ -110,9 +109,9 @@ chatbotGetFlows([_, _, _, _, Flows|_], Flows).
 
 % Modificador:
 /*
- Predicado: chatbotAddFlow(Chatbot,Flow, Chatbotnew)
+ Predicado: chatbotAddFlow(Chatbot, Flow, Chatbotnew)
  Dominios:
-	Chatbot, Chatbotnew: chatbot
+    Chatbot, Chatbotnew: chatbot
     Flow: Flow
  Metas: chatbotAddFlow
  Clausulas:

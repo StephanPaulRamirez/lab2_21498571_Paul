@@ -7,12 +7,13 @@
  flow
  flowGetId
  flowGetNameMsg
+ flowGetOption
  flowAddOption
 
  implementacion
 
  representacion
- id (int) X name-msg (String)  X Option  (Lista de 0 o más opciones) X Flow (Flow)
+ id (int) X name-msg (String)  X Option  (Lista de options)
 */
 
 

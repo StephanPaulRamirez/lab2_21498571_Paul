@@ -14,7 +14,7 @@
  implementacion
 
  representacion
- code (Int)  X message (String)  X ChatbotCodeLink (Int) X InitialFlowCodeLink (Int) X Keyword (Lista de strings) X Option (Option)
+ code (Int)  X message (String)  X ChatbotCodeLink (Int) X InitialFlowCodeLink (Int) X Keyword (Lista de strings)
 */
 
 % Constructor:
