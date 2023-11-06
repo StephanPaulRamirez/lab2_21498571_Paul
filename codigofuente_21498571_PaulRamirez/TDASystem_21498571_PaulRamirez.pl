@@ -126,8 +126,7 @@ systemGetChatHistorylist(System, ChatHistorylist) :-
  Metas: systemGetUserlist
  Clausulas:
 */
-systemGetUserlist(System, Userlist) :-
-    systemGetChatHistorylist(System, ChatHistorylist),
+systemGetUserlist(ChatHistorylist, Userlist) :-
     maplist(chatHistoryGetUser, ChatHistorylist, Userlist).
 
 /*
@@ -140,3 +139,29 @@ systemGetUserlist(System, Userlist) :-
 */
 systemGetLoggeduser(System, User) :-
     systemGetFourth(System, [_, User]).
+
+/*
+ Predicado: systemGetActual(S, A)
+ Dominios:
+        S: system
+        A: lista con 2 enteros y un string
+ Metas: systemGetActual
+ Clausulas:
+*/
+
+systemGetActual([_,_,_,_,Actual], Actual).
+
+% Modificadores:
+/*
+ Predicado: systemAddChatbot(System, Chatbot, Systemnew)
+ Dominios:
+        System, Systemnew: system
+        Chatbot: chatbot
+ Metas:
+     principal: systemAddChatbot
+     secundaria: systemRemoveDup
+ Clausulas:
+*/
+systemAddChatbot([Name, InitialChatbotCodeLink, Chatbots|T], Chatbot,
+                 [Name, InitialChatbotCodeLink, Chatbotsnodup|T]) :-
+    systemRemoveDup([Chatbot|Chatbots], Chatbotsnodup).

@@ -107,18 +107,38 @@ chatbotGetStartFlowId([_, _, _, StartFlowId|_], StartFlowId).
 */
 chatbotGetFlows([_, _, _, _, Flows|_], Flows).
 
+/*
+ Predicado: chatbotAddNoDup(Flows, Flow, Flowsnodup)
+ Dominios:
+    Flows, Flowsnodup: lista de flows
+    Flow: Flow
+ Metas: chatbotAddNoDup
+ Clausulas:
+*/
+% Hechos
+chatbotAddNoDup([], Flow, [Flow]).
+% Reglas
+chatbotAddNoDup([Flowactual|Flows], Flow, [Flowactual|Flowsnodup]) :-
+    optionGetId(Flowactual, Idactual),
+    optionGetId(Flow, Id),
+    dif(Idactual,Id), chatbotAddNoDup(Flows, Flow, Flowsnodup).
+chatbotAddNoDup(Flows, _, Flows).
+
 % Modificador:
 /*
  Predicado: chatbotAddFlow(Chatbot, Flow, Chatbotnew)
  Dominios:
     Chatbot, Chatbotnew: chatbot
     Flow: Flow
- Metas: chatbotAddFlow
+ Metas:
+     principal: chatbotAddFlow
+     secundarias: chatbotAddNoDup
  Clausulas:
 */
 chatbotAddFlow(Chatbot, Flow, Chatbotnew) :-
     chatbotGetId(Chatbot, ChatbotID), chatbotGetName(Chatbot, Name),
     chatbotGetMsg(Chatbot, WelcomeMessage),
     chatbotGetStartFlowId(Chatbot, StartFlowId), chatbotGetFlows(Chatbot, Flows),
-    chatbot(ChatbotID, Name, WelcomeMessage, StartFlowId, [Flow|Flows], Chatbotnew).
+    chatbotAddNoDup(Flows, Flow, Flowsnodup),
+    chatbot(ChatbotID, Name, WelcomeMessage, StartFlowId, Flowsnodup, Chatbotnew).
 chatbotAddFlow(Chatbot, _, Chatbot).

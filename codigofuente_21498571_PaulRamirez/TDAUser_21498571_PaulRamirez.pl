@@ -20,4 +20,4 @@
  Metas: user
  Clausulas:
 */
-user(nombre, user) :- user is nombre.
+user(Nombre, Nombre).

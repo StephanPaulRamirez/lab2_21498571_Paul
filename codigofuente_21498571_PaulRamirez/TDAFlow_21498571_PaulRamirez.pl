@@ -83,13 +83,32 @@ flowGetNameMsg([_, NameMsg|_], NameMsg).
  Clausulas:  */
 flowGetOption([_, _, Option|_], Option).
 
+
+/*
+ Predicado: flowAddNoDup(Options, Option, Optionsnodup)
+ Dominios:
+    Options, Optionsnodup: lista de options
+    Option: option
+ Metas: flowAddNoDup
+ Clausulas:  */
+% Hechos
+flowAddNoDup([], Option, [Option]).
+% Reglas
+flowAddNoDup([Optionactual|Options], Option, [Optionactual|Optionsnodup]) :-
+    optionGetId(Optionactual, Idactual),
+    optionGetId(Option, Id),
+    dif(Idactual,Id), flowAddNoDup(Options, Option, Optionsnodup).
+flowAddNoDup(Options, _, Options).
+
 % Modificador:
 /*
  Predicado: flowAddOption(Flow, Option, Flownew)
  Dominios:
     Flow, Flownew: flow
     Option: option
- Metas: flowAddOption
+ Metas:
+     prinicpal: flowAddOption
+     secundaria: flowAddNoDup
  Clausulas:  */
 flowAddOption(Flow , Option, Flownew) :-
     flowGetId(Flow, Id), flowGetNameMsg(Flow, NameMsg),
