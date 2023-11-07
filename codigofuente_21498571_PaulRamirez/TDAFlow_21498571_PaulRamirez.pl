@@ -18,32 +18,45 @@
 
 
 /*
+ Predicado: flowOptionIdCheck(Option, ListaOptionsOld,ListaOptionsNew)
+ Dominios:
+	ListaOptionsOld, ListaOptionsNew: lista de options
+        Option: option
+ Metas: flowOptionIdCheck
+ Clausulas:
+*/
+% Hechos
+flowOptionIdCheck(_, [], []).
+% Reglas
+flowOptionIdCheck(Option, [Actual|Told], Tnew) :-
+    optionGetId(Option, Id), optionGetId(Actual, Idactual),
+    Id = Idactual, flowOptionIdCheck(Option, Told, Tnew).
+flowOptionIdCheck(Option, [Actual|Told], [Actual|Tnew]) :-
+    flowOptionIdCheck(Option, Told, Tnew).
+
+/*
  Predicado: flowRemoveDup(ListaOptionsOld,ListaOptionsNew)
  Dominios:
 	ListaOptionsOld, ListaOptionsNew: lista de options
- Metas: flowRemoveDup
+ Metas:
+     principal: flowRemoveDup
+     secundaria flowOptionIdCheck
  Clausulas:
 */
 % Hechos
 flowRemoveDup([], []).
-flowRemoveDup([O],[O]).
-
 % Reglas
+flowRemoveDup([O],[O]).
 flowRemoveDup([O|Told], [O|Tnew]) :-
-    optionGetId(O,Id), maplist(optionGetId, Told, Idlist), not(member(Id, Idlist)),
-    flowRemoveDup(Told,Tnew).
-
-flowRemoveDup([O|Told], Tnew) :-
-    optionGetId(O,Id), maplist(optionGetId, Told, Idlist), member(Id, Idlist),
-    flowRemoveDup(Told,Tnew).
+    flowOptionIdCheck(O, Told, T), flowRemoveDup(T, Tnew).
 
 % Constructor:
 
 /*
- Predicado: flow(Id, name-msg, Option, Flow)
+ Predicado: flow(Id, Name-msg, Option, Flow)
  Dominios:
     Id: Int
-    name-msg: string
+    Name-msg: string
     Option: lista de options
     Flow: flow
  Metas:
@@ -91,9 +104,7 @@ flowGetOption([_, _, Option|_], Option).
     Option: option
  Metas: flowAddNoDup
  Clausulas:  */
-% Hechos
 flowAddNoDup([], Option, [Option]).
-% Reglas
 flowAddNoDup([Optionactual|Options], Option, [Optionactual|Optionsnodup]) :-
     optionGetId(Optionactual, Idactual),
     optionGetId(Option, Id),
@@ -113,5 +124,6 @@ flowAddNoDup(Options, _, Options).
 flowAddOption(Flow , Option, Flownew) :-
     flowGetId(Flow, Id), flowGetNameMsg(Flow, NameMsg),
     flowGetOption(Flow, Options),
-    flow(Id, NameMsg, [Option|Options], Flownew).
+    flowAddNoDup(Options, Option, Optionsnodup),
+    flow(Id, NameMsg, Optionsnodup, Flownew).
 flowAddOption(Flow, _, Flow).

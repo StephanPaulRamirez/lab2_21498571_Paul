@@ -1,5 +1,7 @@
 :- include('TDAChatbot_21498571_PaulRamirez.pl').
 :- include('TDAChatHistory_21498571_PaulRamirez.pl').
+:- include('TDAUser_21498571_PaulRamirez.pl').
+
  /*
  TDA System
  especificación
@@ -36,9 +38,8 @@
 
 % Hechos
 systemRemoveDup([], []).
-systemRemoveDup([C],[C]).
-
 % Reglas
+systemRemoveDup([C],[C]).
 systemRemoveDup([C|Told], [C|Tnew]) :-
     chatbotGetId(C,Id), maplist(chatbotGetId, Told, Idlist), not(member(Id, Idlist)),
     systemRemoveDup(Told,Tnew).
@@ -165,3 +166,18 @@ systemGetActual([_,_,_,_,Actual], Actual).
 systemAddChatbot([Name, InitialChatbotCodeLink, Chatbots|T], Chatbot,
                  [Name, InitialChatbotCodeLink, Chatbotsnodup|T]) :-
     systemRemoveDup([Chatbot|Chatbots], Chatbotsnodup).
+
+/*
+ Predicado: systemAddUser(System, User, Systemnew)
+ Dominios:
+        System, Systemnew: system
+        User: string
+ Metas: systemAddUser
+ Clausulas:
+*/
+systemAddUser([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggeduser]|T],
+              User,
+              [Name, InitialChatbotCodeLink, Chatbots, [[UserCH|ChatHistorylist], Loggeduser]|T]) :-
+              user(User, NewUser), systemGetUserlist(ChatHistorylist, Userlist),
+              not(member(NewUser, Userlist)), chatHistory(NewUser, "", UserCH).
+systemAddUser(System,_,System).

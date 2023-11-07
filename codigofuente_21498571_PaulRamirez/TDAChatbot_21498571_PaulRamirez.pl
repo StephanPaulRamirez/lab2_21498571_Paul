@@ -27,10 +27,9 @@
  Clausulas:
 */
 % Hechos
-
 chatbotRemoveDup([], []).
-chatbotRemoveDup([F],[F]).
 % Reglas
+chatbotRemoveDup([F],[F]).
 chatbotRemoveDup([F|Told], [F|Tnew]) :-
     flowGetId(F,Id), maplist(flowGetId, Told, Idlist), not(member(Id, Idlist)),
     chatbotRemoveDup(Told,Tnew).
@@ -115,9 +114,7 @@ chatbotGetFlows([_, _, _, _, Flows|_], Flows).
  Metas: chatbotAddNoDup
  Clausulas:
 */
-% Hechos
 chatbotAddNoDup([], Flow, [Flow]).
-% Reglas
 chatbotAddNoDup([Flowactual|Flows], Flow, [Flowactual|Flowsnodup]) :-
     optionGetId(Flowactual, Idactual),
     optionGetId(Flow, Id),

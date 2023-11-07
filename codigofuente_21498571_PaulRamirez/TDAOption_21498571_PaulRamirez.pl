@@ -20,12 +20,13 @@
 % Constructor:
 
 /*
- Predicado: option(C,M,CCL,IFCL,K,O)
+ Predicado:
+ option(Code,Message,ChatbotCodeLink,InitialFlowCodeLink,Keyword,Option)
  Dominios:
-	C, CCL, IFCL: Int
-	M: string
-	K: lista de 0 o más strings
-	O: Option
+	Code, ChatbotCodeLink, InitialFlowCodeLink: Int
+	Message: string
+	Keyword: lista de strings
+	Option: option
  Metas: option
  Clausulas:  */
 
