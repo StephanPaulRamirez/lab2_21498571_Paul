@@ -181,3 +181,18 @@ systemAddUser([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggedu
               user(User, NewUser), systemGetUserlist(ChatHistorylist, Userlist),
               not(member(NewUser, Userlist)), chatHistory(NewUser, "", UserCH).
 systemAddUser(System,_,System).
+
+/*
+ Predicado: systemLogin(System, User, Systemnew)
+ Dominios:
+        System, Systemnew: system
+        User: string
+ Metas: systemLogin
+ Clausulas:
+*/
+notLogged(Username) :- Username = "".
+systemLogin([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggeduser]|T],
+            User, [Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggedusernew]|T]) :-
+    user(User, Loggedusernew), systemGetUserlist(ChatHistorylist, Userlist),
+    member(Loggedusernew, Userlist), notLogged(Loggeduser).
+systemLogin(System, _,System).
