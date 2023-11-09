@@ -196,3 +196,14 @@ systemLogin([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggeduse
     user(User, Loggedusernew), systemGetUserlist(ChatHistorylist, Userlist),
     member(Loggedusernew, Userlist), notLogged(Loggeduser).
 systemLogin(System, _,System).
+
+/*
+ Predicado: systemLogout(System, Systemnew)
+ Dominios:
+        System, Systemnew: system
+ Metas: systemLogout
+ Clausulas:
+*/
+
+systemLogout([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, _], _],
+             [Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, ""], []]).
