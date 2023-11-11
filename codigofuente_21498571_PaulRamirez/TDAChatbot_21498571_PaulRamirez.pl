@@ -10,6 +10,7 @@
  chatbotGetMsg
  chatbotGetStartFlowId
  chatbotGetFlows
+ chatbotSearchFlow
  chatbotAddFlow
 
  implementacion
@@ -28,14 +29,10 @@
 */
 % Hechos
 chatbotRemoveDup([], []).
-% Reglas
 chatbotRemoveDup([F],[F]).
+% Reglas
 chatbotRemoveDup([F|Told], [F|Tnew]) :-
     flowGetId(F,Id), maplist(flowGetId, Told, Idlist), not(member(Id, Idlist)),
-    chatbotRemoveDup(Told,Tnew).
-
-chatbotRemoveDup([F|Told], Tnew) :-
-    flowGetId(F,Id), maplist(flowGetId, Told, Idlist), member(Id, Idlist),
     chatbotRemoveDup(Told,Tnew).
 
 % Constructor:
@@ -107,6 +104,32 @@ chatbotGetStartFlowId([_, _, _, StartFlowId|_], StartFlowId).
 chatbotGetFlows([_, _, _, _, Flows|_], Flows).
 
 /*
+ Predicado: searchFlow(Flows, Id, Flow)
+ Dominios:
+    Id: int
+    Flows: lista de flows
+    Flow: flow
+ Metas: searchFlow
+ Clausulas:
+*/
+searchFlow([Flowactual|_], Id, Flowactual) :-
+    flowGetId(Flowactual, Idactual), Idactual = Id.
+searchFlow([_|T], Id, Flow) :-
+    searchFlow(T, Id, Flow).
+
+/*
+ Predicado: chatbotSearchFlow(Chatbot, Id, Flow)
+ Dominios:
+    Id: int
+    Chatbot: chatbot
+    Flow: flow
+ Metas: chatbotSearchFlow
+ Clausulas:
+*/
+chatbotSearchFlow(Chatbot, Id, Flow) :-
+    chatbotGetFlows(Chatbot, Flows), searchFlow(Flows, Id, Flow).
+
+/*
  Predicado: chatbotAddNoDup(Flows, Flow, Flowsnodup)
  Dominios:
     Flows, Flowsnodup: lista de flows
@@ -119,7 +142,6 @@ chatbotAddNoDup([Flowactual|Flows], Flow, [Flowactual|Flowsnodup]) :-
     optionGetId(Flowactual, Idactual),
     optionGetId(Flow, Id),
     dif(Idactual,Id), chatbotAddNoDup(Flows, Flow, Flowsnodup).
-chatbotAddNoDup(Flows, _, Flows).
 
 % Modificador:
 /*
@@ -138,4 +160,4 @@ chatbotAddFlow(Chatbot, Flow, Chatbotnew) :-
     chatbotGetStartFlowId(Chatbot, StartFlowId), chatbotGetFlows(Chatbot, Flows),
     chatbotAddNoDup(Flows, Flow, Flowsnodup),
     chatbot(ChatbotID, Name, WelcomeMessage, StartFlowId, Flowsnodup, Chatbotnew).
-chatbotAddFlow(Chatbot, _, Chatbot).
+

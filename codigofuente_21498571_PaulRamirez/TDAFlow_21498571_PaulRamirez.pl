@@ -8,6 +8,7 @@
  flowGetId
  flowGetNameMsg
  flowGetOption
+ flowSearchOption
  flowAddOption
 
  implementacion
@@ -28,11 +29,9 @@
 % Hechos
 flowOptionIdCheck(_, [], []).
 % Reglas
-flowOptionIdCheck(Option, [Actual|Told], Tnew) :-
-    optionGetId(Option, Id), optionGetId(Actual, Idactual),
-    Id = Idactual, flowOptionIdCheck(Option, Told, Tnew).
 flowOptionIdCheck(Option, [Actual|Told], [Actual|Tnew]) :-
-    flowOptionIdCheck(Option, Told, Tnew).
+    optionGetId(Option, Id), optionGetId(Actual, Idactual),
+    dif(Id,Idactual), flowOptionIdCheck(Option, Told, Tnew).
 
 /*
  Predicado: flowRemoveDup(ListaOptionsOld,ListaOptionsNew)
@@ -96,6 +95,33 @@ flowGetNameMsg([_, NameMsg|_], NameMsg).
  Clausulas:  */
 flowGetOption([_, _, Option|_], Option).
 
+/*
+ Predicado: searchOption(Options, Message, Option)
+ Dominios:
+    Options: lista de options
+    Option: option
+    Message: string
+ Metas: searchOption
+ Clausulas:  */
+searchOption([Optionactual|_], Message, Optionactual) :-
+    optionGetKeyword(Optionactual, Keywords),
+    string_lower(Message, Messagemin),
+    maplist(string_lower, Keywords, Keywordsmin), (member(Messagemin, Keywordsmin);
+    (atom_number(Message, N), optionGetId(Optionactual,Id), Id = N)).
+searchOption([_|T], Message, Option) :-
+    searchOption(T, Message, Option).
+
+/*
+ Predicado: flowSearchOption(Flow, Message, Option)
+ Dominios:
+    Flow: flow
+    Option: option
+    Message: string
+ Metas: flowSearchOption
+ Clausulas:  */
+flowSearchOption(Flow, Message, Option) :-
+    flowGetOption(Flow, Options),searchOption(Options, Message, Option).
+
 
 /*
  Predicado: flowAddNoDup(Options, Option, Optionsnodup)
@@ -109,7 +135,6 @@ flowAddNoDup([Optionactual|Options], Option, [Optionactual|Optionsnodup]) :-
     optionGetId(Optionactual, Idactual),
     optionGetId(Option, Id),
     dif(Idactual,Id), flowAddNoDup(Options, Option, Optionsnodup).
-flowAddNoDup(Options, _, Options).
 
 % Modificador:
 /*
@@ -126,4 +151,33 @@ flowAddOption(Flow , Option, Flownew) :-
     flowGetOption(Flow, Options),
     flowAddNoDup(Options, Option, Optionsnodup),
     flow(Id, NameMsg, Optionsnodup, Flownew).
-flowAddOption(Flow, _, Flow).
+
+/*
+ Predicado: optionsGetMsg(Options, Message
+ Dominios:
+    Message: string
+    Options: lista de options
+ Metas: optionsGetMsg
+ Clausulas:  */
+% Hechos
+optionsGetMsg([], "").
+% Reglas
+optionsGetMsg([Option|T], Message) :-
+    optionGetMsg(Option, OptionMessage1),
+    string_concat(OptionMessage1, "\n", OptionMessage2),
+    optionsGetMsg(T, TMessage),
+    string_concat(OptionMessage2, TMessage, Message).
+/*
+ Predicado: flowGetOptionsMsg(Flow, Message)
+ Dominios:
+    Flow: flow
+    Message: string
+ Metas: flowGetOptionsMsg
+ Clausulas:  */
+flowGetOptionsMsg(Flow, Message) :-
+    flowGetOption(Flow, Options), optionsGetMsg(Options, Message).
+
+
+
+
+

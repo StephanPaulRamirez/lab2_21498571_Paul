@@ -1,7 +1,6 @@
 :- include('TDAChatbot_21498571_PaulRamirez.pl').
 :- include('TDAChatHistory_21498571_PaulRamirez.pl').
 :- include('TDAUser_21498571_PaulRamirez.pl').
-
  /*
  TDA System
  especificación
@@ -16,6 +15,7 @@
  systemGetUserlist
  systemGetLoggeduser
  systemGetActual
+ systemSearchChatbot
  systemAddChatbot
  systemAddUser
  systemLogin
@@ -35,17 +35,12 @@
  Metas: systemRemoveDup
  Clausulas:
 */
-
 % Hechos
 systemRemoveDup([], []).
-% Reglas
 systemRemoveDup([C],[C]).
+% Reglas
 systemRemoveDup([C|Told], [C|Tnew]) :-
     chatbotGetId(C,Id), maplist(chatbotGetId, Told, Idlist), not(member(Id, Idlist)),
-    systemRemoveDup(Told,Tnew).
-
-systemRemoveDup([C|Told], Tnew) :-
-    chatbotGetId(C,Id), maplist(chatbotGetId, Told, Idlist), member(Id, Idlist),
     systemRemoveDup(Told,Tnew).
 
 
@@ -152,6 +147,21 @@ systemGetLoggeduser(System, User) :-
 
 systemGetActual([_,_,_,_,Actual], Actual).
 
+
+/*
+ Predicado: systemSearchChatbot(Chatbots, Id, Chatbot)
+ Dominios:
+       Chatbots: lista de chatbots
+       Id: int
+       Chatbot: chatbot
+ Metas: systemSearchChatbot
+ Clausulas:
+*/
+systemSearchChatbot([Chatbotactual|_], Id, Chatbotactual) :-
+    chatbotGetId(Chatbotactual, Idactual), Idactual = Id.
+systemSearchChatbot([_|T], Id, Chatbot) :-
+    systemSearchChatbot(T, Id, Chatbot).
+
 % Modificadores:
 /*
  Predicado: systemAddChatbot(System, Chatbot, Systemnew)
@@ -180,8 +190,8 @@ systemAddUser([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggedu
               [Name, InitialChatbotCodeLink, Chatbots, [[UserCH|ChatHistorylist], Loggeduser]|T]) :-
               user(User, NewUser), systemGetUserlist(ChatHistorylist, Userlist),
               not(member(NewUser, Userlist)), chatHistory(NewUser, "", UserCH).
-systemAddUser(System,_,System).
 
+% Otros:
 /*
  Predicado: systemLogin(System, User, Systemnew)
  Dominios:
@@ -190,12 +200,10 @@ systemAddUser(System,_,System).
  Metas: systemLogin
  Clausulas:
 */
-notLogged(Username) :- Username = "".
-systemLogin([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggeduser]|T],
+systemLogin([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, ""]|T],
             User, [Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggedusernew]|T]) :-
     user(User, Loggedusernew), systemGetUserlist(ChatHistorylist, Userlist),
-    member(Loggedusernew, Userlist), notLogged(Loggeduser).
-systemLogin(System, _,System).
+    member(Loggedusernew, Userlist).
 
 /*
  Predicado: systemLogout(System, Systemnew)
@@ -207,3 +215,49 @@ systemLogin(System, _,System).
 
 systemLogout([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, _], _],
              [Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, ""], []]).
+
+/*
+ Predicado: systemRegisterAppendString(System, Message, CCL, FCL,
+ String)
+ Dominios:
+     System: system
+     Message: string
+     CCL, FCL: int
+ Metas: systemRegisterAppendString
+ Clausulas:
+*/
+systemRegisterAppendString([_, _, Chatbots, [_, Loggeduser]|_],
+                           Message, CCL, FCL,
+                           String) :-
+    systemSearchChatbot(Chatbots, CCL, Chatbot), chatbotGetName(Chatbot, Name),
+    chatbotSearchFlow(Chatbot, FCL, Flow), flowGetNameMsg(Flow, NM),
+    flowGetOptionsMsg(Flow, OM),
+    get_time(Time), string_concat("\n", Time, M0), string_concat(M0, "-", M1),
+    string_concat(M1, Loggeduser, M2), string_concat(M2, ": ", M3),
+    string_concat(M3, Message, M4), string_concat(M4, "\n", M5),
+    string_concat(M5, Time, M6), string_concat(M6, "-", M7),
+    string_concat(M7, Name, M8), string_concat(M8, ": ", M9),
+    string_concat(M9, NM, M10), string_concat(M10, "\n", M11),
+    string_concat(M11, OM, String).
+
+/*
+ Predicado: systemUpdateHistory(Chathistorylist, String, User,
+ Chathistorylistnew)
+ Dominios:
+     Chathistorylist, Chathistorylistnew: lista de chathistorys
+     String: string
+     User: user
+ Metas: systemUpdatehistory
+ Clausulas:
+*/
+% Hechos
+systemUpdateHistory([], _, _, []).
+% Reglas
+systemUpdateHistory([CHactual|Told], String, User, [CHactual|Tnew]) :-
+    chatHistoryGetUser(CHactual, Useractual), dif(Useractual, User),
+    systemUpdateHistory(Told, String, User, Tnew).
+
+systemUpdateHistory([CHactual|Told], String, User, [[User, Registernew]|Tnew]) :-
+    chatHistoryGetUser(CHactual, Useractual), Useractual = User,
+    chatHistoryGetRegister(CHactual, Register), string_concat(Register, String, Registernew),
+    systemUpdateHistory(Told, String, User, Tnew).
