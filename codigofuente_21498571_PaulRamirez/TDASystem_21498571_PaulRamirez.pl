@@ -19,7 +19,9 @@
  systemAddChatbot
  systemAddUser
  systemLogin
- SystemLogout
+ systemLogout
+ systemRegisterAppendString
+ systemUpdateHistory
 
  implementacion
 
@@ -213,8 +215,9 @@ systemLogin([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, ""]|T],
  Clausulas:
 */
 
-systemLogout([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, _], _],
-             [Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, ""], []]).
+systemLogout([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggeduser], _],
+             [Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, ""], []]) :-
+    dif(Loggeduser, "").
 
 /*
  Predicado: systemRegisterAppendString(System, Message, CCL, FCL,
@@ -232,7 +235,7 @@ systemRegisterAppendString([_, _, Chatbots, [_, Loggeduser]|_],
     systemSearchChatbot(Chatbots, CCL, Chatbot), chatbotGetName(Chatbot, Name),
     chatbotSearchFlow(Chatbot, FCL, Flow), flowGetNameMsg(Flow, NM),
     flowGetOptionsMsg(Flow, OM),
-    get_time(Time), string_concat("\n", Time, M0), string_concat(M0, "-", M1),
+    get_time(T), round(T, Time), string_concat("\n", Time, M0), string_concat(M0, "-", M1),
     string_concat(M1, Loggeduser, M2), string_concat(M2, ": ", M3),
     string_concat(M3, Message, M4), string_concat(M4, "\n", M5),
     string_concat(M5, Time, M6), string_concat(M6, "-", M7),

@@ -10,6 +10,7 @@
  flowGetOption
  flowSearchOption
  flowAddOption
+ flowGetOptionsMsg
 
  implementacion
 

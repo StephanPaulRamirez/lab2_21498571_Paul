@@ -1,0 +1,19 @@
+AutoEvaluación
+Nombre: Stephan Paul Ramirez
+Rut: 21498571-3
+
+Autoevaluacion:
+RF1 Nota: 1
+RF2 Nota: 1
+RF3 Nota: 1
+RF4 Nota: 1
+RF5 Nota: 1
+RF6 Nota: 1
+RF7 Nota: 1
+RF8 Nota: 1
+RF9 Nota: 1
+RF10 Nota: 1
+RF11 Nota: 1
+RF12 Nota: 1
+RF13 Nota: 1
+RF14 Nota: 0

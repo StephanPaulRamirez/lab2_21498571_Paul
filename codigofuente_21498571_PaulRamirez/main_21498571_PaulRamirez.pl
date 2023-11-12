@@ -35,3 +35,32 @@ systemTalkRec([Name, InitialChatbotCodeLink, Chatbots, [ChatHistorylist, Loggedu
     systemUpdateHistory(ChatHistorylist, String, Loggeduser, ChatHistorylistnew).
 
 
+/*
+ Predicado: searchUserCH(Chathistorylist, User, Chathistory)
+ Dominios:
+        Chathistorylist: lista de chatHistorys
+        Chathistory: chatHIstory
+        User: string
+ Metas: searchUserCH
+ Clausulas:
+*/
+searchUserCH([CHactual|_], User, CHactual) :-
+    chatHistoryGetUser(CHactual, Useractual), User = Useractual.
+searchUserCH([_|T], User, CH) :-
+    searchUserCH(T, User, CH).
+
+
+/*
+ Predicado: systemSynthesis(System, User, String)
+ Dominios:
+        System. system
+        User: string
+        String: string formateado para usar write
+ Metas: systemSynthesis
+ Clausulas:
+*/
+systemSynthesis(System, User, String) :-
+    systemGetChatHistorylist(System, CHlist), searchUserCH(CHlist, User, CH),
+    chatHistoryGetRegister(CH, String).
+
+
