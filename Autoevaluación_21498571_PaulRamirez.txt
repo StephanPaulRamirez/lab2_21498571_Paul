@@ -14,6 +14,6 @@ RF8 Nota: 1
 RF9 Nota: 1
 RF10 Nota: 1
 RF11 Nota: 1
-RF12 Nota: 1
+RF12 Nota: 0.75
 RF13 Nota: 1
 RF14 Nota: 0
